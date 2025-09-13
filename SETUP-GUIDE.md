@@ -270,3 +270,29 @@ docker exec symfony_node yarn watch
 ```
 
 Access: http://localhost:8080 - You should see "Hello from Vue in Symfony!"
+
+## Stopping the Containers
+
+When you're done working with the application, you can stop the containers using:
+
+### Stop all containers
+```bash
+docker compose stop
+```
+
+### Stop and remove containers (keeps volumes/data)
+```bash
+docker compose down
+```
+
+### Stop, remove containers and volumes (deletes database data)
+```bash
+docker compose down -v
+```
+
+**Note**: Use `docker compose stop` for temporary shutdown and `docker compose down` when you're completely done. Only use `docker compose down -v` if you want to reset the database.
+
+### View running containers
+```bash
+docker compose ps
+```
