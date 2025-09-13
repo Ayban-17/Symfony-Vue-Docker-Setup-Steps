@@ -1,5 +1,35 @@
 # Docker + Symfony Setup
 
+## Requirements
+
+### Docker (Required)
+- **Docker Desktop**: [Download here](https://www.docker.com/products/docker-desktop/)
+- **Docker Compose** (included with Docker Desktop)
+
+**Installation Links:**
+- **Windows**: https://docs.docker.com/desktop/install/windows-install/
+- **macOS**: https://docs.docker.com/desktop/install/mac-install/
+- **Linux**: https://docs.docker.com/desktop/install/linux-install/
+
+### What's Included in Docker Containers
+The following will be automatically installed inside the Docker containers:
+
+- **PHP 8.2** with extensions (PDO, MySQL, Intl, Mbstring, Zip)
+- **Composer** (PHP dependency manager)
+- **Node.js 20** with npm/yarn
+- **Nginx** web server
+- **MySQL 8** database
+
+### Optional (for local development without Docker)
+If you prefer to run things locally instead of using Docker:
+
+- **PHP 8.2+**: https://www.php.net/downloads.php
+- **Composer**: https://getcomposer.org/download/
+- **Node.js 18+**: https://nodejs.org/en/download/
+- **MySQL 8**: https://dev.mysql.com/downloads/mysql/
+
+## Setup Instructions
+
 ### Step 1: Create Dockerfile
 ```dockerfile
 FROM php:8.2-fpm
