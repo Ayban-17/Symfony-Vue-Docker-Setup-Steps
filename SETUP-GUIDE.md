@@ -296,3 +296,109 @@ docker compose down -v
 ```bash
 docker compose ps
 ```
+
+## Development Shortcuts (Makefile)
+
+For easier development workflow, create a `Makefile` in your project root:
+
+```makefile
+.PHONY: up down restart logs
+
+up:
+	docker compose up -d --build
+	yarn watch &
+
+down:
+	pkill -f "yarn watch" || true
+	docker compose down
+
+restart: down up
+
+logs:
+	docker compose logs -f
+```
+
+Now you can use these simple commands:
+- `make up` - Start Docker containers + yarn watch
+- `make down` - Stop yarn watch + stop containers
+- `make restart` - Full restart (down then up)
+- `make logs` - View container logs
+
+## Hot Reloading Setup
+
+### Option 1: yarn watch (File watching only)
+```bash
+# For basic file watching and rebuilding
+docker exec symfony_node yarn watch
+
+# Or if using Makefile
+make up  # Automatically starts yarn watch
+```
+
+### Option 2: webpack-dev-server (Hot Module Replacement)
+For automatic browser refresh without manual reload:
+
+1. **Install webpack-dev-server:**
+```bash
+yarn add webpack-dev-server --dev
+```
+
+2. **Start dev server:**
+```bash
+# Instead of yarn watch, use:
+yarn dev-server
+
+# This will run on http://localhost:8080/ with hot reloading
+```
+
+3. **Update your Makefile** (optional):
+```makefile
+up:
+	docker compose up -d --build
+	yarn dev-server &
+
+down:
+	pkill -f "yarn dev-server" || true
+	docker compose down
+```
+
+**Benefits of webpack-dev-server:**
+- ✅ Automatic browser refresh on file changes
+- ✅ Hot Module Replacement (HMR) for Vue
+- ✅ No need to manually refresh browser
+- ✅ Faster development workflow
+
+**yarn watch vs yarn dev-server:**
+- `yarn watch` - Rebuilds files but requires manual browser refresh
+- `yarn dev-server` - Rebuilds files AND automatically refreshes browser
+
+## Troubleshooting
+
+### Vue changes not reflecting in browser
+1. **Check if build process is running:**
+   ```bash
+   # Look for yarn watch or yarn dev-server
+   ps aux | grep "yarn"
+   ```
+
+2. **Hard refresh browser:** `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac)
+
+3. **Disable browser cache:**
+   - Open DevTools (F12)
+   - Network tab → Check "Disable cache"
+   - Keep DevTools open while developing
+
+4. **Check if files are being rebuilt:**
+   ```bash
+   ls -la public/build/
+   # Look at timestamps - should update when you save Vue files
+   ```
+
+5. **Use webpack-dev-server for automatic refresh:**
+   ```bash
+   # Kill existing yarn watch
+   pkill -f "yarn watch"
+
+   # Start dev server instead
+   yarn dev-server
+   ```
